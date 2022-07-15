@@ -1,49 +1,47 @@
-
-import './App.css';
-import Homepage from './pages/Homepage';
-import { Route, BrowserRouter, Routes, Navigate } from "react-router-dom";
-import LoginPage from './pages/LoginPage';
-import ProductInfo from './pages/ProductInfo';
-import CartPage from './pages/CartPage';
-import RegisterPage from './pages/RegisterPage';
-
-import "./stylesheets/layout.css";
-import "./stylesheets/products.css";
-import "./stylesheets/authentication.css";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import OrdersPage from './pages/OrdersPage';
-import AdminPage from './pages/AdminPage';
- 
+import Sidebar from "./components/sidebar/Sidebar";
+import Topbar from "./components/topbar/Topbar";
+import "./App.css";
+import Home from "./pages/home/Home";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import UserList from "./pages/userList/UserList";
+import User from "./pages/user/User";
+import NewUser from "./pages/newUser/NewUser";
+import ProductList from "./pages/productList/ProductList";
+import Product from "./pages/product/Product";
+import NewProduct from "./pages/newProduct/NewProduct";
 
 function App() {
   return (
-    <div className="App">
-      <ToastContainer />
-      <BrowserRouter>
-      <Routes>
-
-        <Route path="/" exact element={<ProtectedRoutes><Homepage/></ProtectedRoutes>} />
-        <Route path="/login" exact element={<LoginPage/>} />
-        <Route path="/register" exact element={<RegisterPage/>} />
-        <Route path="/productInfo/:productid" exact element={<ProtectedRoutes><ProductInfo/></ProtectedRoutes>} />
-        <Route path="/cart" exact element={<ProtectedRoutes><CartPage/></ProtectedRoutes>} />
-        <Route path="/orders" exact element={<ProtectedRoutes><OrdersPage/></ProtectedRoutes>} />
-        <Route path="/admin" exact element={<ProtectedRoutes><AdminPage/></ProtectedRoutes>} />
-
-      </Routes>
-      </BrowserRouter>
-
-    </div>
+    <Router>
+      <Topbar />
+      <div className="container">
+        <Sidebar />
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/users">
+            <UserList />
+          </Route>
+          <Route path="/user/:userId">
+            <User />
+          </Route>
+          <Route path="/newUser">
+            <NewUser />
+          </Route>
+          <Route path="/products">
+            <ProductList />
+          </Route>
+          <Route path="/product/:productId">
+            <Product />
+          </Route>
+          <Route path="/newproduct">
+            <NewProduct />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
 export default App;
-
-export const ProtectedRoutes=({children})=>{
-  if(localStorage.getItem('currentUser')){
-    return children
-  } else{
-    return <Navigate to="/login"/>
-  }
-}
